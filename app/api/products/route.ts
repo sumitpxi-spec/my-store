@@ -1,12 +1,7 @@
-import { connectDB } from "../../../../lib/db";
-import Product from "../../../../models/Product";
+import { connectDB } from "@/lib/db";
+import Product from "@/models/Product";
 
-
-export async function POST(req: Request) {
-  const data = await req.json();
+export async function GET() {
   await connectDB();
-  const order = await Order.create(data);
-  await sendAdminEmail(order);
-  return Response.json({ success: true });
+  return Response.json(await Product.find());
 }
-
