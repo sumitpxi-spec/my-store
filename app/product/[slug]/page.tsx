@@ -1,7 +1,7 @@
 import OrderModal from "@/components/OrderModal";
 
 export default async function ProductPage({ params }: any) {
-  const products = await fetch("http://localhost:3000/api/products").then(res =>
+  const products = await fetch("/api/products").then(res => res.json());
     res.json()
   );
 
@@ -16,3 +16,4 @@ export default async function ProductPage({ params }: any) {
     </>
   );
 }
+
