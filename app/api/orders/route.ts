@@ -1,6 +1,6 @@
-import { connectDB } from "../../../../lib/db";
-import Order from "../../../../models/Order";
-import { sendAdminEmail } from "../../../../lib/mail";
+import { connectDB } from "@/lib/db";
+import Order from "@/models/Order";
+import { sendAdminEmail } from "@/lib/mail";
 
 export async function POST(req: Request) {
   const data = await req.json();
@@ -9,4 +9,3 @@ export async function POST(req: Request) {
   await sendAdminEmail(order);
   return Response.json({ success: true });
 }
-
