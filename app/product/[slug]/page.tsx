@@ -4,6 +4,7 @@ export default async function ProductPage({ params }: any) {
   const products = await fetch("http://localhost:3000/api/products").then(res =>
     res.json()
   );
+
   const product = products.find((p: any) => p.slug === params.slug);
 
   return (
