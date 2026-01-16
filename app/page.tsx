@@ -1,11 +1,16 @@
-export const dynamic = "force-dynamic";
+"use client";
 
+import { useEffect, useState } from "react";
 import ProductCard from "@/components/ProductCard";
 
-export default async function Home() {
-  const products = await fetch("/api/products", {
-    cache: "no-store",
-  }).then(res => res.json());
+export default function Home() {
+  const [products, setProducts] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetch("/api/products")
+      .then(res => res.json())
+      .then(data => setProducts(data));
+  }, []);
 
   return (
     <div style={{ display: "grid", gap: 20 }}>
