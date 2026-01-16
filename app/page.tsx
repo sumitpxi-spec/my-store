@@ -1,9 +1,11 @@
+export const dynamic = "force-dynamic";
+
 import ProductCard from "@/components/ProductCard";
 
-const products = await fetch("/api/products", {
-  cache: "no-store",
-}).then(res => res.json());
-
+export default async function Home() {
+  const products = await fetch("/api/products", {
+    cache: "no-store",
+  }).then(res => res.json());
 
   return (
     <div style={{ display: "grid", gap: 20 }}>
@@ -13,4 +15,3 @@ const products = await fetch("/api/products", {
     </div>
   );
 }
-
