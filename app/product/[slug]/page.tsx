@@ -1,10 +1,23 @@
-export const dynamic = "force-dynamic";
+"use client";
 
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 import OrderModal from "@/components/OrderModal";
 
-export default async function ProductPage({ params }: any) {
-  const products = await fetch("/api/products").then(res => res.json());
-  const product = products.find((p: any) => p.slug === params.slug);
+export default function ProductPage() {
+  const { slug } = useParams();
+  const [product, setProduct] = useState<any>(null);
+
+  useEffect(() => {
+    fetch("/api/products")
+      .then(res => res.json())
+      .then(products => {
+        const p = products.find((x: any) => x.slug === slug);
+        setProduct(p);
+      });
+  }, [slug]);
+
+  if (!product) return <div>Loading...</div>;
 
   return (
     <>
