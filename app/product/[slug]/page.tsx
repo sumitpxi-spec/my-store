@@ -1,10 +1,9 @@
+export const dynamic = "force-dynamic";
+
 import OrderModal from "@/components/OrderModal";
 
 export default async function ProductPage({ params }: any) {
   const products = await fetch("/api/products").then(res => res.json());
-    res.json()
-  );
-
   const product = products.find((p: any) => p.slug === params.slug);
 
   return (
@@ -16,4 +15,3 @@ export default async function ProductPage({ params }: any) {
     </>
   );
 }
-
