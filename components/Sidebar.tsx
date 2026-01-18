@@ -4,6 +4,9 @@ const categories = [
   "Anti-Acidity",
   "Antibiotics",
   "Anti-Allergic/Asthma",
+  "Anti-Depressant",
+  "Anti-Diabetic",
+  "Anti-Fungus",
   "Men's Health",
   "Pain Relief",
   "Weight Loss",
@@ -14,21 +17,20 @@ export default function Sidebar() {
   return (
     <aside
       style={{
-        width: 220,
-        background: "#fff",
-        border: "1px solid #e5e7eb",
+        width: 240,
+        background: "#ffffff",
+        border: "1px solid #e6eaf0",
         borderRadius: 6,
-        padding: 15,
-        height: "fit-content",
+        padding: "14px 16px",
       }}
     >
       {categories.map(cat => (
         <div
           key={cat}
           style={{
-            padding: "8px 0",
-            borderBottom: "1px solid #f1f1f1",
+            padding: "9px 0",
             fontSize: 14,
+            borderBottom: "1px solid #f1f3f6",
             cursor: "pointer",
           }}
         >
