@@ -1,7 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Header from "@/components/Header";
+import Sidebar from "@/components/Sidebar";
 import ProductCard from "@/components/ProductCard";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   const [products, setProducts] = useState<any[]>([]);
@@ -9,14 +12,35 @@ export default function Home() {
   useEffect(() => {
     fetch("/api/products")
       .then(res => res.json())
-      .then(data => setProducts(data));
+      .then(setProducts);
   }, []);
 
   return (
-    <div style={{ display: "grid", gap: 20 }}>
-      {products.map((p: any) => (
-        <ProductCard key={p.slug} product={p} />
-      ))}
-    </div>
+    <>
+      <Header />
+
+      <main style={{ display: "flex", padding: 30 }}>
+        <Sidebar />
+
+        <section style={{ flex: 1, marginLeft: 30 }}>
+          <h2>Products</h2>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(4, 1fr)",
+              gap: 20,
+              marginTop: 20,
+            }}
+          >
+            {products.map(p => (
+              <ProductCard key={p._id} product={p} />
+            ))}
+          </div>
+        </section>
+      </main>
+
+      <Footer />
+    </>
   );
 }
