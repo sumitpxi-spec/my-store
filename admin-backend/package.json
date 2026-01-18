@@ -1,16 +1,16 @@
 {
   "name": "admin-backend",
   "version": "1.0.0",
+  "private": true,
   "type": "module",
   "scripts": {
     "start": "node index.js"
   },
   "dependencies": {
-    "adminjs": "^7.8.0",
+    "adminjs": "^7.8.15",
     "@adminjs/express": "^6.1.0",
     "@adminjs/mongoose": "^3.0.0",
     "express": "^4.19.2",
-    "mongoose": "^8.0.0",
-    "dotenv": "^16.4.5"
+    "mongoose": "^8.10.0"
   }
 }
