@@ -64,13 +64,11 @@ export default function Header() {
         >
           {/* LOGO */}
           <div style={{ display: "flex", alignItems: "center" }}>
-            <Image
-              src="/logo.png"
-              alt="HappyFamilyStore"
-              width={160}
-              height={40}
-              priority
-            />
+      <img
+  src="/logo.png"
+  alt="HappyFamilyStore"
+  style={{ height: 42, display: "block" }}
+/>
           </div>
 
           {/* NAV */}
