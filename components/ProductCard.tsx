@@ -3,9 +3,9 @@ export default function ProductCard({ product }: any) {
     <div
       style={{
         background: "#fff",
-        border: "1px solid #e5e7eb",
+        border: "1px solid #e6eaf0",
         borderRadius: 6,
-        padding: 12,
+        padding: 14,
         display: "flex",
         flexDirection: "column",
         gap: 10,
@@ -16,32 +16,60 @@ export default function ProductCard({ product }: any) {
         alt={product.title}
         style={{
           width: "100%",
-          height: 160,
+          height: 150,
           objectFit: "contain",
         }}
       />
 
-      <div>
-        <strong style={{ fontSize: 14 }}>{product.title}</strong>
-        <p style={{ fontSize: 12, color: "#6b7280" }}>
-          Active ingredient: {product.ingredient || "N/A"}
-        </p>
+      <div style={{ fontSize: 14, fontWeight: 500 }}>
+        {product.title}
       </div>
 
-      <div style={{ color: "#2563eb", fontWeight: "bold" }}>
+      <div style={{ fontSize: 12, color: "#6b7280" }}>
+        Active ingredient: {product.ingredient || "N/A"}
+      </div>
+
+      <div
+        style={{
+          fontSize: 18,
+          fontWeight: 700,
+          color: "#2563eb",
+        }}
+      >
         ${product.price} <span style={{ fontSize: 12 }}>pill</span>
       </div>
 
-      <button
+      <div
         style={{
-          padding: "8px",
-          background: "#e5e7eb",
-          border: "none",
-          borderRadius: 4,
+          display: "flex",
+          gap: 8,
+          marginTop: "auto",
         }}
       >
-        Add to cart
-      </button>
+        <button
+          style={{
+            flex: 1,
+            padding: "8px",
+            border: "1px solid #d1d5db",
+            background: "#f3f4f6",
+            borderRadius: 4,
+            fontSize: 13,
+          }}
+        >
+          Add to cart
+        </button>
+
+        <button
+          style={{
+            width: 36,
+            border: "1px solid #d1d5db",
+            background: "#fff",
+            borderRadius: 4,
+          }}
+        >
+          ♡
+        </button>
+      </div>
     </div>
   );
 }
