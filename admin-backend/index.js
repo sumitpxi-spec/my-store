@@ -5,25 +5,26 @@ import mongoose from "mongoose";
 
 import AdminJS from "adminjs";
 import AdminJSExpress from "@adminjs/express";
-import AdminJSMongoose from "@adminjs/mongoose";
+import { Database, Resource } from "@adminjs/mongoose";
 
 import Product from "./models/Product.js";
 
-AdminJS.registerAdapter(AdminJSMongoose);
+/* ---------------- REGISTER ADAPTER ---------------- */
+AdminJS.registerAdapter({ Database, Resource });
 
 const app = express();
 
-/* ------------------ DATABASE ------------------ */
+/* ---------------- DATABASE ---------------- */
 await mongoose.connect(process.env.MONGO_URI);
 console.log("MongoDB connected");
 
-/* ------------------ ADMIN ------------------ */
+/* ---------------- ADMIN ---------------- */
 const adminJs = new AdminJS({
   resources: [Product],
   rootPath: "/admin",
 });
 
-/* ------------------ SESSION ------------------ */
+/* ---------------- SESSION ---------------- */
 const sessionStore = MongoStore.create({
   mongoUrl: process.env.MONGO_URI,
   collectionName: "sessions",
@@ -55,7 +56,7 @@ const adminRouter = AdminJSExpress.buildAuthenticatedRouter(
 
 app.use(adminJs.options.rootPath, adminRouter);
 
-/* ------------------ START ------------------ */
+/* ---------------- START ---------------- */
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`AdminJS running at /admin`);
