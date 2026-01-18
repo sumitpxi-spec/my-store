@@ -12,14 +12,29 @@ const categories = [
 
 export default function Sidebar() {
   return (
-    <aside style={{ width: 220 }}>
-      <ul style={{ listStyle: "none", padding: 0 }}>
-        {categories.map(cat => (
-          <li key={cat} style={{ padding: "8px 0", borderBottom: "1px solid #eee" }}>
-            {cat}
-          </li>
-        ))}
-      </ul>
+    <aside
+      style={{
+        width: 220,
+        background: "#fff",
+        border: "1px solid #e5e7eb",
+        borderRadius: 6,
+        padding: 15,
+        height: "fit-content",
+      }}
+    >
+      {categories.map(cat => (
+        <div
+          key={cat}
+          style={{
+            padding: "8px 0",
+            borderBottom: "1px solid #f1f1f1",
+            fontSize: 14,
+            cursor: "pointer",
+          }}
+        >
+          {cat}
+        </div>
+      ))}
     </aside>
   );
 }
