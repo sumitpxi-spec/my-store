@@ -2,36 +2,21 @@ import express from "express";
 import mongoose from "mongoose";
 import AdminJS from "adminjs";
 import AdminJSExpress from "@adminjs/express";
-import * as AdminJSMongoose from "@adminjs/mongoose";
-import dotenv from "dotenv";
-
-import Product from "./models/Product.js";
-import Category from "./models/Category.js";
-import Order from "./models/Order.js";
-
-dotenv.config();
+import AdminJSMongoose from "@adminjs/mongoose";
 
 AdminJS.registerAdapter(AdminJSMongoose);
 
 const app = express();
 
 /* MongoDB */
-await mongoose.connect(process.env.MONGODB_URI);
+await mongoose.connect(process.env.MONGO_URI);
 
-/* AdminJS */
+/* Admin */
 const admin = new AdminJS({
-  resources: [
-    { resource: Product },
-    { resource: Category },
-    { resource: Order }
-  ],
   rootPath: "/admin",
-  branding: {
-    companyName: "My Store Admin"
-  }
+  resources: [],
 });
 
-/* Auth */
 const adminRouter = AdminJSExpress.buildAuthenticatedRouter(
   admin,
   {
@@ -44,17 +29,18 @@ const adminRouter = AdminJSExpress.buildAuthenticatedRouter(
       }
       return null;
     },
-    cookiePassword: "sessionsecret"
+    cookieName: "adminjs",
+    cookiePassword: process.env.ADMIN_SECRET,
   }
 );
 
 app.use(admin.options.rootPath, adminRouter);
 
-app.get("/", (_, res) => {
-  res.send("Admin backend running");
+app.get("/", (req, res) => {
+  res.send("AdminJS running");
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log("AdminJS running on port", PORT);
-});
+app.listen(PORT, () =>
+  console.log(`AdminJS running on port ${PORT}`)
+);
