@@ -1,21 +1,42 @@
-import express from "express";
-import mongoose from "mongoose";
-import AdminJS from "adminjs";
-import AdminJSExpress from "@adminjs/express";
-import AdminJSMongoose from "@adminjs/mongoose";
+import express from 'express'
+import mongoose from 'mongoose'
+import AdminJS from 'adminjs'
+import AdminJSExpress from '@adminjs/express'
+import session from 'express-session'
+import MongoStore from 'connect-mongo'
 
-AdminJS.registerAdapter(AdminJSMongoose);
+import Product from './models/Product.js'
 
-const app = express();
+const app = express()
 
-/* MongoDB */
-await mongoose.connect(process.env.MONGO_URI);
+/* ============================
+   DATABASE
+============================ */
+await mongoose.connect(process.env.MONGO_URI)
+console.log('MongoDB connected')
 
-/* Admin */
+/* ============================
+   ADMINJS
+============================ */
 const admin = new AdminJS({
-  rootPath: "/admin",
-  resources: [],
-});
+  resources: [
+    {
+      resource: Product,
+      options: {
+        navigation: 'Catalog',
+      },
+    },
+  ],
+  rootPath: '/admin',
+})
+
+/* ============================
+   SESSION (REQUIRED FIX)
+============================ */
+const sessionStore = MongoStore.create({
+  mongoUrl: process.env.MONGO_URI,
+  collectionName: 'sessions',
+})
 
 const adminRouter = AdminJSExpress.buildAuthenticatedRouter(
   admin,
@@ -25,22 +46,35 @@ const adminRouter = AdminJSExpress.buildAuthenticatedRouter(
         email === process.env.ADMIN_EMAIL &&
         password === process.env.ADMIN_PASSWORD
       ) {
-        return { email };
+        return { email }
       }
-      return null;
+      return null
     },
-    cookieName: "adminjs",
-    cookiePassword: process.env.ADMIN_SECRET,
+    cookieName: 'adminjs',
+    cookiePassword: process.env.ADMIN_COOKIE_SECRET,
+  },
+  null,
+  {
+    store: sessionStore,
+    resave: false,
+    saveUninitialized: false,
+    secret: process.env.ADMIN_COOKIE_SECRET,
   }
-);
+)
 
-app.use(admin.options.rootPath, adminRouter);
+app.use(admin.options.rootPath, adminRouter)
 
-app.get("/", (req, res) => {
-  res.send("AdminJS running");
-});
+/* ============================
+   ROOT CHECK
+============================ */
+app.get('/', (req, res) => {
+  res.send('AdminJS running')
+})
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () =>
+/* ============================
+   START SERVER
+============================ */
+const PORT = process.env.PORT || 10000
+app.listen(PORT, () => {
   console.log(`AdminJS running on port ${PORT}`)
-);
+})
