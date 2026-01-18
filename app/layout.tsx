@@ -1,5 +1,9 @@
-import "../styles/globals.css";
-import Providers from "./providers";
+import "./globals.css";
+
+export const metadata = {
+  title: "HappyFamilyStore",
+  description: "Online Store",
+};
 
 export default function RootLayout({
   children,
@@ -8,11 +12,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        <h1 style={{ padding: 20 }}>My Store</h1>
-        <Providers />
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
