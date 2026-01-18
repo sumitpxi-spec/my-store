@@ -6,26 +6,33 @@ import Sidebar from "@/components/Sidebar";
 import ProductCard from "@/components/ProductCard";
 import Footer from "@/components/Footer";
 
+const PER_PAGE = 8;
+
 export default function Home() {
   const [products, setProducts] = useState<any[]>([]);
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     fetch("/api/products")
       .then(res => res.json())
-      .then(data => setProducts(data));
+      .then(setProducts);
   }, []);
 
-  const filteredProducts = products.filter(p =>
+  const filtered = products.filter(p =>
     p.title.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const totalPages = Math.ceil(filtered.length / PER_PAGE);
+  const paginated = filtered.slice(
+    (page - 1) * PER_PAGE,
+    page * PER_PAGE
   );
 
   return (
     <>
-      {/* HEADER */}
       <Header />
 
-      {/* MAIN LAYOUT */}
       <main style={{ background: "#f7f8fb", minHeight: "80vh" }}>
         <div
           style={{
@@ -36,32 +43,31 @@ export default function Home() {
             gap: 30,
           }}
         >
-          {/* SIDEBAR */}
           <Sidebar />
 
-          {/* CONTENT */}
           <section style={{ flex: 1 }}>
             {/* TITLE + SEARCH */}
             <div
               style={{
                 display: "flex",
                 justifyContent: "space-between",
-                alignItems: "center",
                 marginBottom: 20,
               }}
             >
-              <h2 style={{ margin: 0 }}>Products</h2>
+              <h2>Products</h2>
 
               <div>
                 <input
                   value={search}
-                  onChange={e => setSearch(e.target.value)}
+                  onChange={e => {
+                    setSearch(e.target.value);
+                    setPage(1);
+                  }}
                   placeholder="Search"
                   style={{
                     padding: "8px 10px",
                     border: "1px solid #d1d5db",
                     borderRadius: 4,
-                    fontSize: 14,
                   }}
                 />
                 <button
@@ -72,7 +78,6 @@ export default function Home() {
                     color: "#fff",
                     border: "none",
                     borderRadius: 4,
-                    fontSize: 14,
                   }}
                 >
                   Search
@@ -80,7 +85,7 @@ export default function Home() {
               </div>
             </div>
 
-            {/* PRODUCT GRID */}
+            {/* GRID */}
             <div
               style={{
                 display: "grid",
@@ -88,30 +93,40 @@ export default function Home() {
                 gap: 20,
               }}
             >
-              {filteredProducts.map(product => (
-                <ProductCard key={product._id} product={product} />
+              {paginated.map(p => (
+                <ProductCard key={p._id} product={p} />
               ))}
             </div>
 
-            {/* PAGINATION PLACEHOLDER */}
+            {/* PAGINATION */}
             <div
               style={{
                 display: "flex",
                 justifyContent: "center",
-                gap: 10,
+                gap: 8,
                 marginTop: 30,
               }}
             >
-              <button>1</button>
-              <button>2</button>
-              <button>3</button>
-              <button>Next</button>
+              {Array.from({ length: totalPages }).map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setPage(i + 1)}
+                  style={{
+                    padding: "6px 10px",
+                    border: "1px solid #d1d5db",
+                    background: page === i + 1 ? "#2563eb" : "#fff",
+                    color: page === i + 1 ? "#fff" : "#000",
+                    borderRadius: 4,
+                  }}
+                >
+                  {i + 1}
+                </button>
+              ))}
             </div>
           </section>
         </div>
       </main>
 
-      {/* FOOTER */}
       <Footer />
     </>
   );
