@@ -3,11 +3,13 @@ import Image from "next/image";
 export default function Header() {
   return (
     <>
-      {/* TOP INFO BAR */}
+      {/* ===== TOP BAR ===== */}
       <div
         style={{
-          background: "#f3f6fb",
-          borderBottom: "1px solid #e5e7eb",
+          background: "#f5f7fb",
+          borderBottom: "1px solid #e6eaf0",
+          fontSize: 13,
+          color: "#1f2937",
         }}
       >
         <div
@@ -17,24 +19,28 @@ export default function Header() {
             padding: "6px 20px",
             display: "flex",
             justifyContent: "space-between",
-            fontSize: 13,
+            alignItems: "center",
           }}
         >
-          <div style={{ display: "flex", gap: 20 }}>
+          {/* LEFT */}
+          <div style={{ display: "flex", gap: 18, alignItems: "center" }}>
             <span>🇺🇸 US: +1 (888) 243-74-06</span>
             <span>🇬🇧 GB: +44 (800) 041-87-44</span>
+            <span style={{ display: "flex", gap: 6, alignItems: "center" }}>
+              📞 <span style={{ color: "#2563eb" }}>Request callback</span>
+            </span>
           </div>
 
-          <div style={{ display: "flex", gap: 15 }}>
-            <span style={{ cursor: "pointer" }}>Request callback</span>
-            <span>ENGLISH</span>
-            <span>USD</span>
+          {/* RIGHT */}
+          <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
+            <span>ENGLISH ▾</span>
+            <span>USD ▾</span>
             <span style={{ fontWeight: 500 }}>LOGIN</span>
             <span
               style={{
                 background: "#2563eb",
                 color: "#fff",
-                padding: "4px 10px",
+                padding: "4px 12px",
                 borderRadius: 4,
                 fontWeight: 500,
               }}
@@ -45,11 +51,11 @@ export default function Header() {
         </div>
       </div>
 
-      {/* MAIN HEADER */}
+      {/* ===== MAIN HEADER ===== */}
       <header
         style={{
           background: "#fff",
-          borderBottom: "1px solid #e5e7eb",
+          borderBottom: "1px solid #e6eaf0",
         }}
       >
         <div
@@ -64,20 +70,23 @@ export default function Header() {
         >
           {/* LOGO */}
           <div style={{ display: "flex", alignItems: "center" }}>
-      <img
-          src="/logo.png"
-          alt="HappyFamilyStore"
-          style={{ height: 42, display: "block" }}
-          />
+            <Image
+              src="/logo.png"
+              alt="HappyFamilyStore"
+              width={190}
+              height={48}
+              priority
+            />
           </div>
 
-          {/* NAV */}
+          {/* NAVIGATION */}
           <nav
             style={{
               display: "flex",
-              gap: 22,
+              gap: 26,
               fontSize: 15,
               fontWeight: 500,
+              color: "#111827",
             }}
           >
             <a>Home</a>
@@ -90,8 +99,35 @@ export default function Header() {
           </nav>
 
           {/* CART */}
-          <div style={{ fontSize: 14, fontWeight: 500 }}>
-            🛒 <strong>Total</strong> $0.00
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              fontSize: 14,
+              fontWeight: 500,
+            }}
+          >
+            <span style={{ position: "relative" }}>
+              🛒
+              <span
+                style={{
+                  position: "absolute",
+                  top: -6,
+                  right: -8,
+                  background: "#ef4444",
+                  color: "#fff",
+                  fontSize: 10,
+                  padding: "2px 5px",
+                  borderRadius: "50%",
+                }}
+              >
+                0
+              </span>
+            </span>
+            <span>
+              Total <strong>$0.00</strong>
+            </span>
           </div>
         </div>
       </header>
