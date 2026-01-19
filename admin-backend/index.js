@@ -18,42 +18,46 @@ const app = express();
 await mongoose.connect(process.env.MONGO_URI);
 console.log("MongoDB connected");
 
-/* ---------------- ADMIN CONFIG ---------------- */
-{
-  resource: Product,
-  options: {
-    navigation: "My Store",
-    properties: {
-      slug: { isVisible: false },
-      images: { isArray: true },
-      description: { type: "richtext" },
-    },
-    actions: {
-      new: {
-        before: async (request) => {
-          if (request.payload?.title) {
-            request.payload.slug = request.payload.title
-              .toLowerCase()
-              .replace(/[^a-z0-9]+/g, "-")
-              .replace(/(^-|-$)/g, "");
-          }
-          return request;
+/* ---------------- ADMIN ---------------- */
+const adminJs = new AdminJS({
+  rootPath: "/admin",
+  resources: [
+    {
+      resource: Product,
+      options: {
+        navigation: "My Store",
+        properties: {
+          slug: { isVisible: false },
+          images: { isArray: true },
+        },
+        actions: {
+          new: {
+            before: async (request) => {
+              if (request.payload?.title) {
+                request.payload.slug = request.payload.title
+                  .toLowerCase()
+                  .replace(/[^a-z0-9]+/g, "-")
+                  .replace(/(^-|-$)/g, "");
+              }
+              return request;
+            },
+          },
+          edit: {
+            before: async (request) => {
+              if (request.payload?.title) {
+                request.payload.slug = request.payload.title
+                  .toLowerCase()
+                  .replace(/[^a-z0-9]+/g, "-")
+                  .replace(/(^-|-$)/g, "");
+              }
+              return request;
+            },
+          },
         },
       },
-      edit: {
-        before: async (request) => {
-          if (request.payload?.title) {
-            request.payload.slug = request.payload.title
-              .toLowerCase()
-              .replace(/[^a-z0-9]+/g, "-")
-              .replace(/(^-|-$)/g, "");
-          }
-          return request;
-        },
-      },
     },
-  },
-}
+  ],
+});
 
 /* ---------------- SESSION ---------------- */
 const sessionStore = MongoStore.create({
@@ -100,7 +104,5 @@ app.get("/api/products", async (req, res) => {
 /* ---------------- START ---------------- */
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
-  console.log(`AdminJS running at http://localhost:${PORT}/admin`);
+  console.log(`AdminJS running at /admin`);
 });
-
-
