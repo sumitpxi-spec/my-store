@@ -13,12 +13,12 @@ export default function Home() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
 
-useEffect(() => {
-  fetch("/api/products", { cache: "no-store" })
-    .then(res => res.json())
-    .then(setProducts)
-    .catch(console.error);
-}, []);
+  useEffect(() => {
+    fetch("/api/products", { cache: "no-store" })
+      .then(res => res.json())
+      .then(setProducts)
+      .catch(console.error);
+  }, []);
 
   const filtered = products.filter(p =>
     p.title?.toLowerCase().includes(search.toLowerCase())
@@ -49,20 +49,6 @@ useEffect(() => {
           <section style={{ flex: 1 }}>
             <h2>Products</h2>
 
-            {/* 🔴 DEBUG — REMOVE LATER */}
-            <pre
-              style={{
-                background: "#eee",
-                padding: 10,
-                marginBottom: 20,
-                maxHeight: 300,
-                overflow: "auto",
-                fontSize: 12,
-              }}
-            >
-              {JSON.stringify(products, null, 2)}
-            </pre>
-
             {paginated.length === 0 && <p>No products found.</p>}
 
             <div
@@ -76,6 +62,35 @@ useEffect(() => {
                 <ProductCard key={p.id || p._id} product={p} />
               ))}
             </div>
+
+            {/* PAGINATION */}
+            {totalPages > 1 && (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: 8,
+                  marginTop: 30,
+                }}
+              >
+                {Array.from({ length: totalPages }).map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setPage(i + 1)}
+                    style={{
+                      padding: "6px 10px",
+                      border: "1px solid #d1d5db",
+                      background: page === i + 1 ? "#2563eb" : "#fff",
+                      color: page === i + 1 ? "#fff" : "#000",
+                      borderRadius: 4,
+                      cursor: "pointer",
+                    }}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+              </div>
+            )}
           </section>
         </div>
       </main>
@@ -84,4 +99,3 @@ useEffect(() => {
     </>
   );
 }
-
