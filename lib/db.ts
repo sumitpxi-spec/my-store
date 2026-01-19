@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 
-export async function connectDB() {
+const dbConnect = async () => {
   if (mongoose.connection.readyState >= 1) return;
-  return mongoose.connect(process.env.MONGO_URI as string);
-}
+  return mongoose.connect(process.env.MONGO_URI!);
+};
+
+export default dbConnect;
