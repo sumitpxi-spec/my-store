@@ -21,8 +21,6 @@ const ProductSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const ProductSchema = new mongoose.Schema(
-  {
     /* ---------------- LISTING (PHASE 1) ---------------- */
     title: {
       type: String,
@@ -81,4 +79,5 @@ const ProductSchema = new mongoose.Schema(
 
 export default mongoose.models.Product ||
   mongoose.model("Product", ProductSchema);
+
 
