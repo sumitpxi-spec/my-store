@@ -13,17 +13,12 @@ export default function Home() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
 
-  useEffect(() => {
-    fetch("https://admin-backend-npfj.onrender.com/api/products", {
-      cache: "no-store",
-    })
-      .then(res => res.json())
-      .then(data => {
-        console.log("PRODUCTS FROM API:", data);
-        setProducts(data);
-      })
-      .catch(console.error);
-  }, []);
+useEffect(() => {
+  fetch("/api/products", { cache: "no-store" })
+    .then(res => res.json())
+    .then(setProducts)
+    .catch(console.error);
+}, []);
 
   const filtered = products.filter(p =>
     p.title?.toLowerCase().includes(search.toLowerCase())
@@ -89,3 +84,4 @@ export default function Home() {
     </>
   );
 }
+
