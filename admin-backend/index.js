@@ -1,3 +1,4 @@
+import Product from "./models/Product.js";
 import express from "express";
 import session from "express-session";
 import MongoStore from "connect-mongo";
@@ -61,3 +62,4 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`AdminJS running at /admin`);
 });
+
