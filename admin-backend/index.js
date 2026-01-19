@@ -18,21 +18,44 @@ await mongoose.connect(process.env.MONGO_URI);
 console.log("MongoDB connected");
 
 /* ---------------- ADMIN ---------------- */
-const adminJs = new AdminJS({
-  databases: [],
-  resources: [
-    {
-      resource: Product,
-      options: {
-        navigation: "My Store",
-        properties: {
-          description: { type: "richtext" },
+{
+  resource: Product,
+  options: {
+    navigation: "My Store",
+    properties: {
+      slug: {
+        isVisible: false, // auto-generated
+      },
+      images: {
+        isArray: true,
+      },
+    },
+    actions: {
+      new: {
+        before: async (request) => {
+          if (request.payload?.title) {
+            request.payload.slug = request.payload.title
+              .toLowerCase()
+              .replace(/[^a-z0-9]+/g, "-")
+              .replace(/(^-|-$)/g, "");
+          }
+          return request;
+        },
+      },
+      edit: {
+        before: async (request) => {
+          if (request.payload?.title) {
+            request.payload.slug = request.payload.title
+              .toLowerCase()
+              .replace(/[^a-z0-9]+/g, "-")
+              .replace(/(^-|-$)/g, "");
+          }
+          return request;
         },
       },
     },
-  ],
-  rootPath: "/admin",
-});
+  },
+}
 
 /* ---------------- SESSION ---------------- */
 const sessionStore = MongoStore.create({
@@ -82,6 +105,7 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`AdminJS running at /admin`);
 });
+
 
 
 
