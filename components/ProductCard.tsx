@@ -5,20 +5,27 @@ export default function ProductCard({ product }: any) {
     <div
       style={{
         background: "#fff",
-        borderRadius: 8,
+        borderRadius: 10,
         padding: 16,
-        boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+        boxShadow: "0 2px 10px rgba(0,0,0,0.06)",
       }}
     >
       <img
         src={product.images?.[0]}
         alt={product.title}
-        style={{ width: "100%", height: 180, objectFit: "contain" }}
+        style={{
+          width: "100%",
+          height: 180,
+          objectFit: "contain",
+          marginBottom: 12,
+        }}
       />
 
-      <h3 style={{ marginTop: 12 }}>{product.title}</h3>
+      <h3 style={{ fontSize: 18, fontWeight: 600 }}>
+        {product.title}
+      </h3>
 
-      <p style={{ color: "#6b7280", fontSize: 14 }}>
+      <p style={{ fontSize: 14, color: "#6b7280" }}>
         Active ingredient:{" "}
         <strong>{product.genericName}</strong>
       </p>
@@ -26,25 +33,27 @@ export default function ProductCard({ product }: any) {
       <p
         style={{
           fontSize: 20,
-          fontWeight: "bold",
+          fontWeight: 700,
           color: "#2563eb",
           marginTop: 6,
         }}
       >
         ${product.pricePerPill}{" "}
-        <span style={{ fontSize: 14, color: "#6b7280" }}>pill</span>
+        <span style={{ fontSize: 14, fontWeight: 400 }}>
+          pill
+        </span>
       </p>
 
-      <Link href={`/product/${product.slug}`}>
+      <Link href={`/products/${product.slug}`}>
         <button
           style={{
             marginTop: 12,
             width: "100%",
-            padding: "10px",
             background: "#2563eb",
             color: "#fff",
-            borderRadius: 6,
             border: "none",
+            borderRadius: 6,
+            padding: "10px 0",
             cursor: "pointer",
           }}
         >
@@ -54,3 +63,4 @@ export default function ProductCard({ product }: any) {
     </div>
   );
 }
+
