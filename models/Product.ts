@@ -8,14 +8,22 @@ const ProductSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      lowercase: true,
-      trim: true,
     },
 
-    genericName: { type: String }, // Sildenafil
-    pricePerPill: { type: Number, required: true },
+    genericName: {
+      type: String,
+      required: true,
+    },
 
-    images: [{ type: String }],
+    pricePerPill: {
+      type: Number,
+      required: true,
+    },
+
+    images: {
+      type: [String],
+      default: [],
+    },
 
     category: { type: String },
     active: { type: Boolean, default: true },
