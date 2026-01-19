@@ -6,7 +6,7 @@ import Sidebar from "@/components/Sidebar";
 import ProductCard from "@/components/ProductCard";
 import Footer from "@/components/Footer";
 
-const PER_PAGE = 8;
+const PER_PAGE = 12;
 
 export default function Home() {
   const [products, setProducts] = useState<any[]>([]);
@@ -104,4 +104,5 @@ export default function Home() {
     </>
   );
 }
+
 
