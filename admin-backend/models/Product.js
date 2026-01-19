@@ -2,51 +2,32 @@ import mongoose from "mongoose";
 
 const ProductSchema = new mongoose.Schema(
   {
-    title: {
-      type: String,
-      required: true,
-      trim: true,
-    },
+    title: { type: String, required: true },
 
-    slug: {
-      type: String,
-      unique: true,
-      index: true,
-    },
+    slug: { type: String, required: true, unique: true },
 
-    genericName: {
-      type: String,
-    },
+    // Generic name / active ingredient
+    genericName: { type: String, required: true },
 
-    pricePerPill: {
-      type: Number,
-      required: true,
-    },
+    // Per-pill price (static)
+    pricePerPill: { type: Number, required: true },
 
-    description: {
-      type: String,
-    },
+    // Optional legacy price (can remove later)
+    price: { type: Number },
+
+    description: { type: String },
 
     images: {
       type: [String],
       default: [],
     },
 
-    category: {
-      type: String,
-    },
+    category: { type: String },
 
-    active: {
-      type: Boolean,
-      default: true,
-    },
+    active: { type: Boolean, default: true },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
-const Product =
-  mongoose.models.Product || mongoose.model("Product", ProductSchema);
-
-export default Product;
+export default mongoose.models.Product ||
+  mongoose.model("Product", ProductSchema);
