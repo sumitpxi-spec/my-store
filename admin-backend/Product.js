@@ -1,88 +1,23 @@
-// admin-backend/models/Product.js
 import mongoose from "mongoose";
 
-/**
- * Package schema
- * Example:
- * 200mg x 10 pills – $36.77
- */
-const PackageSchema = new mongoose.Schema(
-  {
-    dosage: {
-      type: String, // "200mg"
-      required: true,
-    },
-    pills: {
-      type: Number, // 10, 20, 40
-      required: true,
-    },
-    price: {
-      type: Number, // total price
-      required: true,
-    },
-    perPill: {
-      type: Number, // price per pill
-      required: true,
-    },
-    bonus: {
-      type: String, // "+4 pills"
-      default: "",
-    },
-  },
-  { _id: false }
-);
-
-/**
- * Product schema
- */
 const ProductSchema = new mongoose.Schema(
   {
-    name: {
-      type: String,
-      required: true, // Viagra
-    },
+    title: { type: String, required: true },
 
-    slug: {
-      type: String,
-      required: true,
-      unique: true, // viagra
-      lowercase: true,
-    },
+    slug: { type: String, required: true, unique: true },
 
-    category: {
-      type: String, // Erectile Dysfunction
-      required: true,
-    },
+    genericName: { type: String, required: true },
 
-    activeIngredient: {
-      type: String, // Sildenafil
-      required: true,
-    },
+    pricePerPill: { type: Number, required: true },
 
-    image: {
-      type: String, // image URL
-      required: true,
-    },
+    images: { type: [String], default: [] },
 
-    shortDescription: {
-      type: String,
-    },
+    category: { type: String, required: true },
 
-    description: {
-      type: String,
-    },
-
-    inStock: {
-      type: Boolean,
-      default: true,
-    },
-
-    packages: {
-      type: [PackageSchema], // 👈 VERY IMPORTANT
-      required: true,
-    },
+    active: { type: Boolean, default: true },
   },
   { timestamps: true }
 );
 
-export default mongoose.model("Product", ProductSchema);
+export default mongoose.models.Product ||
+  mongoose.model("Product", ProductSchema);
