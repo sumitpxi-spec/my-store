@@ -8,8 +8,6 @@ import AdminJS from "adminjs";
 import AdminJSExpress from "@adminjs/express";
 import { Database, Resource } from "@adminjs/mongoose";
 
-import Product from "./models/Product.js";
-
 /* ---------------- REGISTER ADAPTER ---------------- */
 AdminJS.registerAdapter({ Database, Resource });
 
@@ -73,5 +71,6 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`AdminJS running at /admin`);
 });
+
 
 
