@@ -1,13 +1,24 @@
 import mongoose from "mongoose";
 
-const PackageSchema = new mongoose.Schema(
+const ProductSchema = new mongoose.Schema(
   {
-    label: { type: String },          // e.g. "30 pills"
-    pills: { type: Number },          // 30
-    mg: { type: String },             // "100mg"
-    price: { type: Number },          // static price
+    title: { type: String, required: true },
+
+    slug: { type: String, required: true, unique: true },
+
+    genericName: { type: String, required: true },
+
+    pricePerPill: { type: Number, required: true },
+
+    images: {
+      type: [String],
+      default: [],
+    },
+
+    category: { type: String },
+    active: { type: Boolean, default: true },
   },
-  { _id: false }
+  { timestamps: true }
 );
 
 const ProductSchema = new mongoose.Schema(
@@ -70,3 +81,4 @@ const ProductSchema = new mongoose.Schema(
 
 export default mongoose.models.Product ||
   mongoose.model("Product", ProductSchema);
+
