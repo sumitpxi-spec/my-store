@@ -66,11 +66,23 @@ const adminRouter = AdminJSExpress.buildAuthenticatedRouter(
 
 app.use(adminJs.options.rootPath, adminRouter);
 
+// ---------- PUBLIC API ----------
+app.get("/api/products", async (req, res) => {
+  try {
+    const products = await Product.find({ active: true }).lean();
+    res.json(products);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch products" });
+  }
+});
+
 /* ---------------- START ---------------- */
+
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`AdminJS running at /admin`);
 });
+
 
 
 
