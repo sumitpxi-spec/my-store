@@ -7,14 +7,11 @@ export async function GET() {
       { cache: "no-store" }
     );
 
-    if (!res.ok) {
-      throw new Error("Failed to fetch products from backend");
-    }
-
     const data = await res.json();
+
     return NextResponse.json(data);
   } catch (error) {
-    console.error(error);
+    console.error("API ERROR:", error);
     return NextResponse.json([], { status: 500 });
   }
 }
