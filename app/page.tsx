@@ -8,41 +8,26 @@ import Footer from "@/components/Footer";
 
 const PER_PAGE = 8;
 
-export default function HomePage() {
+export default function Home() {
   const [products, setProducts] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
 
-  /* ---------------- FETCH PRODUCTS ---------------- */
   useEffect(() => {
-    async function loadProducts() {
-      try {
-        const res = await fetch("/api/products", {
-          cache: "no-store",
-        });
-
-        const data = await res.json();
-        setProducts(Array.isArray(data) ? data : []);
-      } catch (err) {
-        console.error("Failed to load products", err);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    loadProducts();
+    fetch("https://admin-backend-npfj.onrender.com/api/products", {
+      cache: "no-store",
+    })
+      .then(res => res.json())
+      .then(setProducts)
+      .catch(console.error);
   }, []);
 
-  /* ---------------- SEARCH ---------------- */
-  const filteredProducts = products.filter((p) =>
+  const filtered = products.filter(p =>
     p.title?.toLowerCase().includes(search.toLowerCase())
   );
 
-  /* ---------------- PAGINATION ---------------- */
-  const totalPages = Math.ceil(filteredProducts.length / PER_PAGE);
-
-  const paginatedProducts = filteredProducts.slice(
+  const totalPages = Math.ceil(filtered.length / PER_PAGE);
+  const paginated = filtered.slice(
     (page - 1) * PER_PAGE,
     page * PER_PAGE
   );
@@ -51,12 +36,7 @@ export default function HomePage() {
     <>
       <Header />
 
-      <main
-        style={{
-          background: "#f7f8fb",
-          minHeight: "80vh",
-        }}
-      >
+      <main style={{ background: "#f7f8fb", minHeight: "80vh" }}>
         <div
           style={{
             maxWidth: 1200,
@@ -66,49 +46,13 @@ export default function HomePage() {
             gap: 30,
           }}
         >
-          {/* ---------------- SIDEBAR ---------------- */}
           <Sidebar />
 
-          {/* ---------------- CONTENT ---------------- */}
           <section style={{ flex: 1 }}>
-            {/* TITLE + SEARCH */}
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginBottom: 20,
-              }}
-            >
-              <h2 style={{ fontSize: 22, fontWeight: 600 }}>Products</h2>
+            <h2>Products</h2>
 
-              <div>
-                <input
-                  value={search}
-                  onChange={(e) => {
-                    setSearch(e.target.value);
-                    setPage(1);
-                  }}
-                  placeholder="Search products"
-                  style={{
-                    padding: "8px 10px",
-                    border: "1px solid #d1d5db",
-                    borderRadius: 4,
-                    width: 220,
-                  }}
-                />
-              </div>
-            </div>
+            {paginated.length === 0 && <p>No products found.</p>}
 
-            {/* ---------------- LOADING ---------------- */}
-            {loading && <p>Loading products...</p>}
-
-            {/* ---------------- EMPTY ---------------- */}
-            {!loading && paginatedProducts.length === 0 && (
-              <p>No products found.</p>
-            )}
-
-            {/* ---------------- PRODUCT GRID ---------------- */}
             <div
               style={{
                 display: "grid",
@@ -116,39 +60,10 @@ export default function HomePage() {
                 gap: 20,
               }}
             >
-              {paginatedProducts.map((product) => (
-                <ProductCard key={product._id} product={product} />
+              {paginated.map(p => (
+                <ProductCard key={p._id} product={p} />
               ))}
             </div>
-
-            {/* ---------------- PAGINATION ---------------- */}
-            {totalPages > 1 && (
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  gap: 8,
-                  marginTop: 30,
-                }}
-              >
-                {Array.from({ length: totalPages }).map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setPage(i + 1)}
-                    style={{
-                      padding: "6px 12px",
-                      border: "1px solid #d1d5db",
-                      background: page === i + 1 ? "#2563eb" : "#fff",
-                      color: page === i + 1 ? "#fff" : "#000",
-                      borderRadius: 4,
-                      cursor: "pointer",
-                    }}
-                  >
-                    {i + 1}
-                  </button>
-                ))}
-              </div>
-            )}
           </section>
         </div>
       </main>
