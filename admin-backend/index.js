@@ -18,7 +18,7 @@ const app = express();
 await mongoose.connect(process.env.MONGO_URI);
 console.log("MongoDB connected");
 
-/* ---------------- ADMIN ---------------- */
+/* ---------------- ADMINJS CONFIG ---------------- */
 const adminJs = new AdminJS({
   rootPath: "/admin",
   resources: [
@@ -65,6 +65,7 @@ const sessionStore = MongoStore.create({
   collectionName: "sessions",
 });
 
+/* ---------------- ADMIN ROUTER ---------------- */
 const adminRouter = AdminJSExpress.buildAuthenticatedRouter(
   adminJs,
   {
@@ -101,7 +102,7 @@ app.get("/api/products", async (req, res) => {
   }
 });
 
-/* ---------------- START ---------------- */
+/* ---------------- START SERVER ---------------- */
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`AdminJS running at /admin`);
