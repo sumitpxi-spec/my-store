@@ -1,12 +1,13 @@
-import Product from "./models/Product.js";
 import express from "express";
+import mongoose from "mongoose";
 import session from "express-session";
 import MongoStore from "connect-mongo";
-import mongoose from "mongoose";
 
 import AdminJS from "adminjs";
 import AdminJSExpress from "@adminjs/express";
 import { Database, Resource } from "@adminjs/mongoose";
+
+import Product from "./models/Product.js";
 
 /* ---------------- REGISTER ADAPTER ---------------- */
 AdminJS.registerAdapter({ Database, Resource });
@@ -17,45 +18,54 @@ const app = express();
 await mongoose.connect(process.env.MONGO_URI);
 console.log("MongoDB connected");
 
-/* ---------------- ADMIN ---------------- */
-{
-  resource: Product,
-  options: {
-    navigation: "My Store",
-    properties: {
-      slug: {
-        isVisible: false, // auto-generated
-      },
-      images: {
-        isArray: true,
-      },
-    },
-    actions: {
-      new: {
-        before: async (request) => {
-          if (request.payload?.title) {
-            request.payload.slug = request.payload.title
-              .toLowerCase()
-              .replace(/[^a-z0-9]+/g, "-")
-              .replace(/(^-|-$)/g, "");
-          }
-          return request;
+/* ---------------- ADMIN CONFIG ---------------- */
+const adminJs = new AdminJS({
+  rootPath: "/admin",
+
+  resources: [
+    {
+      resource: Product,
+      options: {
+        navigation: "My Store",
+
+        properties: {
+          slug: {
+            isVisible: false, // auto-generated
+          },
+          images: {
+            isArray: true,
+          },
+        },
+
+        actions: {
+          new: {
+            before: async (request) => {
+              if (request.payload?.title) {
+                request.payload.slug = request.payload.title
+                  .toLowerCase()
+                  .replace(/[^a-z0-9]+/g, "-")
+                  .replace(/(^-|-$)/g, "");
+              }
+              return request;
+            },
+          },
+
+          edit: {
+            before: async (request) => {
+              if (request.payload?.title) {
+                request.payload.slug = request.payload.title
+                  .toLowerCase()
+                  .replace(/[^a-z0-9]+/g, "-")
+                  .replace(/(^-|-$)/g, "");
+              }
+              return request;
+            },
+          },
         },
       },
-      edit: {
-        before: async (request) => {
-          if (request.payload?.title) {
-            request.payload.slug = request.payload.title
-              .toLowerCase()
-              .replace(/[^a-z0-9]+/g, "-")
-              .replace(/(^-|-$)/g, "");
-          }
-          return request;
-        },
-      },
     },
-  },
-}
+  ],
+});
 
 /* ---------------- SESSION ---------------- */
 const sessionStore = MongoStore.create({
@@ -89,7 +99,7 @@ const adminRouter = AdminJSExpress.buildAuthenticatedRouter(
 
 app.use(adminJs.options.rootPath, adminRouter);
 
-// ---------- PUBLIC API ----------
+/* ---------------- PUBLIC API ---------------- */
 app.get("/api/products", async (req, res) => {
   try {
     const products = await Product.find({ active: true }).lean();
@@ -100,13 +110,7 @@ app.get("/api/products", async (req, res) => {
 });
 
 /* ---------------- START ---------------- */
-
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
-  console.log(`AdminJS running at /admin`);
+  console.log(`AdminJS running at http://localhost:${PORT}/admin`);
 });
-
-
-
-
-
