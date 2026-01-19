@@ -15,6 +15,7 @@ export default function ProductCard({ product }: any) {
         gap: 10,
       }}
     >
+      {/* IMAGE */}
       <img
         src={product.images?.[0] || "/placeholder.png"}
         alt={product.title}
@@ -25,29 +26,30 @@ export default function ProductCard({ product }: any) {
         }}
       />
 
-      <h3 style={{ fontSize: 16, fontWeight: 600 }}>
+      {/* PRODUCT NAME */}
+      <h3 style={{ fontSize: 16, fontWeight: 700 }}>
         {product.title}
       </h3>
 
-      {product.genericName && (
-        <p style={{ fontSize: 13, color: "#6b7280" }}>
-          Active ingredient:{" "}
-          <strong>{product.genericName}</strong>
-        </p>
-      )}
+      {/* GENERIC NAME */}
+      <p style={{ fontSize: 13, color: "#6b7280" }}>
+        Active ingredient:{" "}
+        <strong>{product.genericName}</strong>
+      </p>
 
-      {product.pricePerPill && (
-        <p
-          style={{
-            fontSize: 18,
-            fontWeight: 700,
-            color: "#2563eb",
-          }}
-        >
-          ${product.pricePerPill} <span style={{ fontSize: 12 }}>pill</span>
-        </p>
-      )}
+      {/* PRICE PER PILL */}
+      <p
+        style={{
+          fontSize: 18,
+          fontWeight: 700,
+          color: "#2563eb",
+        }}
+      >
+        ${product.pricePerPill}{" "}
+        <span style={{ fontSize: 12 }}>pill</span>
+      </p>
 
+      {/* CTA */}
       <Link href={`/products/${product.slug}`}>
         <button
           style={{
@@ -66,5 +68,3 @@ export default function ProductCard({ product }: any) {
     </div>
   );
 }
-
-
