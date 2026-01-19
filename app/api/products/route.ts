@@ -1,10 +1,27 @@
-export const dynamic = "force-dynamic";
-
-import { connectDB } from "@/lib/db";
+import { NextResponse } from "next/server";
+import mongoose from "mongoose";
 import Product from "@/models/Product";
 
+/* ---------------- MONGODB CONNECTION ---------------- */
+const MONGODB_URI = process.env.MONGO_URI!;
+
+if (!mongoose.connection.readyState) {
+  await mongoose.connect(MONGODB_URI);
+}
+
+/* ---------------- GET ALL PRODUCTS ---------------- */
 export async function GET() {
-  await connectDB();
-  const products = await Product.find();
-  return Response.json(products);
+  try {
+    const products = await Product.find({ active: true })
+      .sort({ createdAt: -1 })
+      .lean();
+
+    return NextResponse.json(products);
+  } catch (error) {
+    console.error("PRODUCT FETCH ERROR:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch products" },
+      { status: 500 }
+    );
+  }
 }
