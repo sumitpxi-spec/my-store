@@ -21,7 +21,18 @@ console.log("MongoDB connected");
 
 /* ---------------- ADMIN ---------------- */
 const adminJs = new AdminJS({
-  resources: [Product],
+  databases: [],
+  resources: [
+    {
+      resource: Product,
+      options: {
+        navigation: "My Store",
+        properties: {
+          description: { type: "richtext" },
+        },
+      },
+    },
+  ],
   rootPath: "/admin",
 });
 
@@ -62,4 +73,5 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`AdminJS running at /admin`);
 });
+
 
