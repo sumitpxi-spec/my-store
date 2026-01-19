@@ -6,13 +6,10 @@ const ProductSchema = new mongoose.Schema(
 
     slug: { type: String, required: true, unique: true },
 
-    // Generic name / active ingredient
     genericName: { type: String, required: true },
 
-    // Per-pill price (static)
     pricePerPill: { type: Number, required: true },
 
-    // Optional legacy price (can remove later)
     price: { type: Number },
 
     description: { type: String },
