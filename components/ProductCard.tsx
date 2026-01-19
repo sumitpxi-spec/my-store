@@ -63,4 +63,3 @@ export default function ProductCard({ product }: any) {
     </div>
   );
 }
-
