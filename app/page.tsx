@@ -13,17 +13,16 @@ export default function Home() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
 
- useEffect(() => {
-  fetch("https://admin-backend-npfj.onrender.com/api/products", {
-    cache: "no-store",
-  })
-    .then(res => res.json())
-    .then(data => {
-      // only active products
-      setProducts(data.filter((p: any) => p.active));
+  useEffect(() => {
+    fetch("https://admin-backend-npfj.onrender.com/api/products", {
+      cache: "no-store",
     })
-    .catch(console.error);
-}, []);
+      .then(res => res.json())
+      .then(data => {
+        setProducts(data.filter((p: any) => p.active));
+      })
+      .catch(console.error);
+  }, []);
 
   const filtered = products.filter(p =>
     p.title?.toLowerCase().includes(search.toLowerCase())
@@ -64,38 +63,9 @@ export default function Home() {
               }}
             >
               {paginated.map(p => (
-                <ProductCard key={p.id || p._id} product={p} />
+                <ProductCard key={p._id} product={p} />
               ))}
             </div>
-
-            {/* PAGINATION */}
-            {totalPages > 1 && (
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  gap: 8,
-                  marginTop: 30,
-                }}
-              >
-                {Array.from({ length: totalPages }).map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setPage(i + 1)}
-                    style={{
-                      padding: "6px 10px",
-                      border: "1px solid #d1d5db",
-                      background: page === i + 1 ? "#2563eb" : "#fff",
-                      color: page === i + 1 ? "#fff" : "#000",
-                      borderRadius: 4,
-                      cursor: "pointer",
-                    }}
-                  >
-                    {i + 1}
-                  </button>
-                ))}
-              </div>
-            )}
           </section>
         </div>
       </main>
@@ -104,5 +74,3 @@ export default function Home() {
     </>
   );
 }
-
-
