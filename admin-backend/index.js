@@ -23,19 +23,11 @@ console.log("MongoDB connected");
   resource: Product,
   options: {
     navigation: "My Store",
-
     properties: {
       slug: { isVisible: false },
-
-      images: {
-        isArray: true,
-      },
-
-      description: {
-        type: "richtext",
-      },
+      images: { isArray: true },
+      description: { type: "richtext" },
     },
-
     actions: {
       new: {
         before: async (request) => {
@@ -48,7 +40,6 @@ console.log("MongoDB connected");
           return request;
         },
       },
-
       edit: {
         before: async (request) => {
           if (request.payload?.title) {
@@ -63,7 +54,6 @@ console.log("MongoDB connected");
     },
   },
 }
-
 
 /* ---------------- SESSION ---------------- */
 const sessionStore = MongoStore.create({
@@ -112,4 +102,5 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`AdminJS running at http://localhost:${PORT}/admin`);
 });
+
 
