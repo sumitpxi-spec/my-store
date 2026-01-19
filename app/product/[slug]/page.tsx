@@ -1,30 +1,56 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
 import OrderModal from "@/components/OrderModal";
 
-export default function ProductPage() {
-  const { slug } = useParams();
-  const [product, setProduct] = useState<any>(null);
+/* ---------------- FETCH SINGLE PRODUCT ---------------- */
+async function getProduct(id: string) {
+  const res = await fetch(
+    `https://admin-backend-npfj.onrender.com/api/products/${id}`,
+    {
+      cache: "no-store",
+    }
+  );
 
-  useEffect(() => {
-    fetch("/api/products")
-      .then(res => res.json())
-      .then(products => {
-        const p = products.find((x: any) => x.slug === slug);
-        setProduct(p);
-      });
-  }, [slug]);
+  if (!res.ok) {
+    throw new Error("Failed to fetch product");
+  }
 
-  if (!product) return <div>Loading...</div>;
+  return res.json();
+}
+
+/* ---------------- PAGE ---------------- */
+export default async function ProductPage({ params }: any) {
+  const product = await getProduct(params.id);
+
+  if (!product) {
+    return <div className="p-10 text-center">Product not found</div>;
+  }
 
   return (
-    <>
-      <img src={product.images[0]} />
-      <h2>{product.title}</h2>
-      <p>${product.price}</p>
+    <div className="max-w-5xl mx-auto p-6">
+      {/* IMAGE */}
+      <div className="flex justify-center mb-6">
+        <img
+          src={product.images?.[0]}
+          alt={product.title}
+          className="w-80 rounded shadow"
+        />
+      </div>
+
+      {/* TITLE */}
+      <h1 className="text-3xl font-bold mb-4">{product.title}</h1>
+
+      {/* DESCRIPTION */}
+      <div
+        className="prose mb-4"
+        dangerouslySetInnerHTML={{ __html: product.description }}
+      />
+
+      {/* PRICE */}
+      <p className="text-2xl text-blue-600 font-semibold mb-6">
+        ${product.price}
+      </p>
+
+      {/* ORDER / CART */}
       <OrderModal product={product} />
-    </>
+    </div>
   );
 }
