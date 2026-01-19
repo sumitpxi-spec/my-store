@@ -2,56 +2,20 @@ import mongoose from "mongoose";
 
 const ProductSchema = new mongoose.Schema(
   {
-    title: { type: String, required: true },
-
-    slug: { type: String, required: true, unique: true },
-
-    genericName: { type: String, required: true },
-
-    pricePerPill: { type: Number, required: true },
-
-    images: {
-      type: [String],
-      default: [],
-    },
-
-    category: { type: String },
-    active: { type: Boolean, default: true },
-  },
-  { timestamps: true }
-);
-
-    /* ---------------- LISTING (PHASE 1) ---------------- */
     title: {
       type: String,
       required: true,
+      trim: true,
     },
 
     slug: {
       type: String,
-      required: true,
       unique: true,
-      lowercase: true,
+      index: true,
     },
 
     genericName: {
       type: String,
-      required: true,
-    },
-
-    image: {
-      type: String,
-      required: true,
-    },
-
-    category: {
-      type: [String], // ["Bestsellers", "ED"]
-      default: [],
-    },
-
-    isBestSeller: {
-      type: Boolean,
-      default: false,
     },
 
     pricePerPill: {
@@ -59,25 +23,30 @@ const ProductSchema = new mongoose.Schema(
       required: true,
     },
 
-    active: {
-      type: Boolean,
-      default: true,
-    },
-
-    /* ---------------- DETAILS (PHASE 2 – READY) ---------------- */
     description: {
       type: String,
     },
 
-    packages: {
-      type: [PackageSchema], // STATIC prices
+    images: {
+      type: [String],
       default: [],
     },
+
+    category: {
+      type: String,
+    },
+
+    active: {
+      type: Boolean,
+      default: true,
+    },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
-export default mongoose.models.Product ||
-  mongoose.model("Product", ProductSchema);
+const Product =
+  mongoose.models.Product || mongoose.model("Product", ProductSchema);
 
-
+export default Product;
