@@ -2,16 +2,23 @@ import mongoose from "mongoose";
 
 const ProductSchema = new mongoose.Schema(
   {
-    title: String,
-    slug: String,
-    description: String,
-    price: Number,
-    images: [String],
-    category: [String],
-    active: {
-      type: Boolean,
-      default: true,
+    title: { type: String, required: true },
+
+    slug: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
     },
+
+    genericName: { type: String }, // Sildenafil
+    pricePerPill: { type: Number, required: true },
+
+    images: [{ type: String }],
+
+    category: { type: String },
+    active: { type: Boolean, default: true },
   },
   { timestamps: true }
 );
