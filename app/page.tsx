@@ -18,7 +18,10 @@ export default function Home() {
       cache: "no-store",
     })
       .then(res => res.json())
-      .then(setProducts)
+      .then(data => {
+        console.log("PRODUCTS FROM API:", data);
+        setProducts(data);
+      })
       .catch(console.error);
   }, []);
 
@@ -51,6 +54,20 @@ export default function Home() {
           <section style={{ flex: 1 }}>
             <h2>Products</h2>
 
+            {/* 🔴 DEBUG — REMOVE LATER */}
+            <pre
+              style={{
+                background: "#eee",
+                padding: 10,
+                marginBottom: 20,
+                maxHeight: 300,
+                overflow: "auto",
+                fontSize: 12,
+              }}
+            >
+              {JSON.stringify(products, null, 2)}
+            </pre>
+
             {paginated.length === 0 && <p>No products found.</p>}
 
             <div
@@ -61,7 +78,7 @@ export default function Home() {
               }}
             >
               {paginated.map(p => (
-                <ProductCard key={p._id} product={p} />
+                <ProductCard key={p.id || p._id} product={p} />
               ))}
             </div>
           </section>
