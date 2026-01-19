@@ -3,6 +3,8 @@
 import Link from "next/link";
 
 export default function ProductCard({ product }: any) {
+  const price = product.pricePerPill;
+
   return (
     <div
       style={{
@@ -15,7 +17,6 @@ export default function ProductCard({ product }: any) {
         gap: 10,
       }}
     >
-      {/* IMAGE */}
       <img
         src={product.images?.[0] || "/placeholder.png"}
         alt={product.title}
@@ -26,18 +27,15 @@ export default function ProductCard({ product }: any) {
         }}
       />
 
-      {/* PRODUCT NAME */}
       <h3 style={{ fontSize: 16, fontWeight: 700 }}>
         {product.title}
       </h3>
 
-      {/* GENERIC NAME */}
       <p style={{ fontSize: 13, color: "#6b7280" }}>
         Active ingredient:{" "}
         <strong>{product.genericName}</strong>
       </p>
 
-      {/* PRICE PER PILL */}
       <p
         style={{
           fontSize: 18,
@@ -45,11 +43,10 @@ export default function ProductCard({ product }: any) {
           color: "#2563eb",
         }}
       >
-        ${product.pricePerPill}{" "}
+        ${price.toFixed(2)}{" "}
         <span style={{ fontSize: 12 }}>pill</span>
       </p>
 
-      {/* CTA */}
       <Link href={`/products/${product.slug}`}>
         <button
           style={{
