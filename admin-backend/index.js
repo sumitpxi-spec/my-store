@@ -10,10 +10,20 @@ import { Database, Resource } from "@adminjs/mongoose";
 
 import Product from "./models/Product.js";
 
-/* ---------------- REGISTER ADAPTER ---------------- */
 AdminJS.registerAdapter({ Database, Resource });
 
 const app = express();
+
+/* ✅ CORS MUST BE HERE */
+app.use(
+  cors({
+    origin: [
+      "https://my-store-omega-three.vercel.app",
+      "http://localhost:3000",
+    ],
+    methods: ["GET", "POST"],
+  })
+);
 
 /* ---------------- DATABASE ---------------- */
 await mongoose.connect(process.env.MONGO_URI);
@@ -108,4 +118,5 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`AdminJS running at /admin`);
 });
+
 
