@@ -10,59 +10,40 @@ import { Database, Resource } from "@adminjs/mongoose";
 
 import Product from "./models/Product.js";
 
-/* ---------------- REGISTER ADAPTER ---------------- */
 AdminJS.registerAdapter({ Database, Resource });
 
 const app = express();
 
-/* =================================================
-   ✅ CORS — KEEP IT SIMPLE (THIS FIXES YOUR ISSUE)
-================================================= */
-app.use(cors()); // <-- DO NOT restrict for now
+/* ============================
+   ✅ HARD CORS FIX (NO GUESSING)
+============================= */
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  if (req.method === "OPTIONS") return res.sendStatus(200);
+  next();
+});
 
 /* ---------------- DATABASE ---------------- */
 await mongoose.connect(process.env.MONGO_URI);
 console.log("MongoDB connected");
 
+/* ---------------- PUBLIC API (MUST BE BEFORE ADMINJS) ---------------- */
+app.get("/api/products", async (req, res) => {
+  try {
+    const products = await Product.find({ active: true }).lean();
+    res.json(products);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch products" });
+  }
+});
+
 /* ---------------- ADMINJS CONFIG ---------------- */
 const adminJs = new AdminJS({
   rootPath: "/admin",
-  resources: [
-    {
-      resource: Product,
-      options: {
-        navigation: "My Store",
-        properties: {
-          slug: { isVisible: false },
-          images: { isArray: true },
-        },
-        actions: {
-          new: {
-            before: async (request) => {
-              if (request.payload?.title) {
-                request.payload.slug = request.payload.title
-                  .toLowerCase()
-                  .replace(/[^a-z0-9]+/g, "-")
-                  .replace(/(^-|-$)/g, "");
-              }
-              return request;
-            },
-          },
-          edit: {
-            before: async (request) => {
-              if (request.payload?.title) {
-                request.payload.slug = request.payload.title
-                  .toLowerCase()
-                  .replace(/[^a-z0-9]+/g, "-")
-                  .replace(/(^-|-$)/g, "");
-              }
-              return request;
-            },
-          },
-        },
-      },
-    },
-  ],
+  resources: [{ resource: Product }],
 });
 
 /* ---------------- SESSION ---------------- */
@@ -98,19 +79,8 @@ const adminRouter = AdminJSExpress.buildAuthenticatedRouter(
 
 app.use(adminJs.options.rootPath, adminRouter);
 
-/* ---------------- PUBLIC API ---------------- */
-app.get("/api/products", async (req, res) => {
-  try {
-    const products = await Product.find({ active: true }).lean();
-    res.json(products);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Failed to fetch products" });
-  }
-});
-
-/* ---------------- START SERVER ---------------- */
+/* ---------------- START ---------------- */
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
-  console.log(`AdminJS running at http://localhost:${PORT}/admin`);
+  console.log(`Backend running on port ${PORT}`);
 });
