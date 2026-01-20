@@ -10,20 +10,27 @@ import { Database, Resource } from "@adminjs/mongoose";
 
 import Product from "./models/Product.js";
 
+/* ---------------- REGISTER ADAPTER ---------------- */
 AdminJS.registerAdapter({ Database, Resource });
 
 const app = express();
 
-/* ✅ CORS MUST BE HERE */
+/* =================================================
+   ✅ CORS — MUST BE FIRST (VERY IMPORTANT)
+================================================= */
 app.use(
   cors({
     origin: [
       "https://my-store-omega-three.vercel.app",
       "http://localhost:3000",
     ],
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
+// ✅ HANDLE PREFLIGHT REQUESTS
+app.options("*", cors());
 
 /* ---------------- DATABASE ---------------- */
 await mongoose.connect(process.env.MONGO_URI);
@@ -109,6 +116,7 @@ app.get("/api/products", async (req, res) => {
     const products = await Product.find({ active: true }).lean();
     res.json(products);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: "Failed to fetch products" });
   }
 });
@@ -116,7 +124,5 @@ app.get("/api/products", async (req, res) => {
 /* ---------------- START SERVER ---------------- */
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
-  console.log(`AdminJS running at /admin`);
+  console.log(`AdminJS running at http://localhost:${PORT}/admin`);
 });
-
-
