@@ -1,5 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
+import cors from "cors";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 
@@ -107,3 +108,4 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`AdminJS running at /admin`);
 });
+
