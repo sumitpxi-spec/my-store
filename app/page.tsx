@@ -13,15 +13,20 @@ export default function Home() {
   const [page, setPage] = useState(1);
 
   useEffect(() => {
-    fetch("https://admin-backend-npfj.onrender.com/api/products", {
-      cache: "no-store",
+  fetch("https://admin-backend-npfj.onrender.com/api/products")
+    .then(res => {
+      console.log("STATUS:", res.status);
+      return res.json();
     })
-      .then(res => res.json())
-      .then(data => {
-        setProducts(data); // ✅ THIS WAS MISSING
-      })
-      .catch(console.error);
-  }, []);
+    .then(data => {
+      console.log("DATA FROM API:", data);
+      setProducts(data);
+    })
+    .catch(err => {
+      console.error("FETCH ERROR:", err);
+    });
+}, []);
+
 
   const totalPages = Math.ceil(products.length / PER_PAGE);
   const paginated = products.slice(
@@ -69,3 +74,4 @@ export default function Home() {
     </>
   );
 }
+
