@@ -41,9 +41,12 @@ export default function ProductsPage() {
 
   return (
     <div className="flex gap-8">
-      {/* Sidebar (optional / already exists in your layout) */}
-      <aside className="w-64 hidden md:block" />
+      {/* Sidebar (already exists in your UI) */}
+      <aside className="w-64 hidden md:block">
+        {/* categories */}
+      </aside>
 
+      {/* Products */}
       <div className="flex-1">
         <h1 className="text-2xl font-bold mb-6">Products</h1>
 
