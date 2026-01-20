@@ -13,7 +13,7 @@ export default function Home() {
   const [page, setPage] = useState(1);
 
   useEffect(() => {
-  fetch("https://admin-backend-npfj.onrender.com/api/products")
+  fetch("/api/products")
     .then(res => {
       console.log("STATUS:", res.status);
       return res.json();
@@ -74,4 +74,5 @@ export default function Home() {
     </>
   );
 }
+
 
