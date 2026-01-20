@@ -19,7 +19,7 @@ export default function Home() {
     })
       .then(res => res.json())
       .then(data => {
-        setProducts(data.filter((p: any) => p.active));
+        setProducts(data);
       })
       .catch(console.error);
   }, []);
@@ -74,3 +74,4 @@ export default function Home() {
     </>
   );
 }
+
