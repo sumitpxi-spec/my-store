@@ -16,21 +16,9 @@ AdminJS.registerAdapter({ Database, Resource });
 const app = express();
 
 /* =================================================
-   ✅ CORS — MUST BE FIRST (VERY IMPORTANT)
+   ✅ CORS — KEEP IT SIMPLE (THIS FIXES YOUR ISSUE)
 ================================================= */
-app.use(
-  cors({
-    origin: [
-      "https://my-store-omega-three.vercel.app",
-      "http://localhost:3000",
-    ],
-    methods: ["GET", "POST", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
-
-// ✅ HANDLE PREFLIGHT REQUESTS
-app.options("*", cors());
+app.use(cors()); // <-- DO NOT restrict for now
 
 /* ---------------- DATABASE ---------------- */
 await mongoose.connect(process.env.MONGO_URI);
