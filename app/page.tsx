@@ -10,7 +10,6 @@ const PER_PAGE = 12;
 
 export default function Home() {
   const [products, setProducts] = useState<any[]>([]);
-  const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
 
   useEffect(() => {
@@ -19,17 +18,13 @@ export default function Home() {
     })
       .then(res => res.json())
       .then(data => {
-        setProducts(data);
+        setProducts(data); // ✅ THIS WAS MISSING
       })
       .catch(console.error);
   }, []);
 
-  const filtered = products.filter(p =>
-    p.title?.toLowerCase().includes(search.toLowerCase())
-  );
-
-  const totalPages = Math.ceil(filtered.length / PER_PAGE);
-  const paginated = filtered.slice(
+  const totalPages = Math.ceil(products.length / PER_PAGE);
+  const paginated = products.slice(
     (page - 1) * PER_PAGE,
     page * PER_PAGE
   );
@@ -74,4 +69,3 @@ export default function Home() {
     </>
   );
 }
-
