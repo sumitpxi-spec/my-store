@@ -1,13 +1,10 @@
 import OrderModal from "@/components/OrderModal";
 
 /* ---------------- FETCH SINGLE PRODUCT ---------------- */
-async function getProduct(id: string) {
-  const res = await fetch(
-    `https://admin-backend-npfj.onrender.com/api/products/${id}`,
-    {
-      cache: "no-store",
-    }
-  );
+async function getProduct(slug: string) {
+  const res = await fetch(`/api/products/${slug}`, {
+    cache: "no-store",
+  });
 
   if (!res.ok) {
     throw new Error("Failed to fetch product");
@@ -54,3 +51,4 @@ export default async function ProductPage({ params }: any) {
     </div>
   );
 }
+
