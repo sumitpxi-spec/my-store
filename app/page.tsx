@@ -37,11 +37,6 @@ export default function Home() {
           <aside className="w-64 shrink-0">
             <Sidebar />
           </aside>
-// test //
-<div className="bg-red-600 text-white text-2xl p-6 mb-6">
-  TAILWIND TEST – YOU SHOULD SEE A BIG RED BOX
-</div>
-
           
           {/* PRODUCTS */}
           <section className="flex-1">
@@ -60,4 +55,5 @@ export default function Home() {
     </>
   );
 }
+
 
