@@ -1,17 +1,25 @@
-const categories = [
-  "Bestsellers",
-  "Anti Viral",
-  "Anti-Acidity",
-  "Antibiotics",
-  "Anti-Allergic/Asthma",
-  "Anti-Depressant",
-  "Anti-Diabetic",
-  "Anti-Fungus",
-  "Men's Health",
-  "Pain Relief",
-  "Weight Loss",
-  "Women's Health",
-];
+"use client";
+
+export default function Sidebar() {
+  return (
+    <div className="bg-white rounded-xl p-4 shadow-sm">
+      <ul className="space-y-3 text-sm">
+        <li>Bestsellers</li>
+        <li>Anti Viral</li>
+        <li>Anti-Acidity</li>
+        <li>Antibiotics</li>
+        <li>Anti-Allergic/Asthma</li>
+        <li>Anti-Depressant</li>
+        <li>Anti-Diabetic</li>
+        <li>Anti-Fungus</li>
+        <li>Men&apos;s Health</li>
+        <li>Pain Relief</li>
+        <li>Weight Loss</li>
+        <li>Women&apos;s Health</li>
+      </ul>
+    </div>
+  );
+}
 
 export default function Sidebar() {
   return (
