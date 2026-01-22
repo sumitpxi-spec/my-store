@@ -4,10 +4,11 @@ import Link from "next/link";
 
 export default function ProductCard({ product }: any) {
   return (
-    <div className="bg-white border rounded-lg p-4 hover:shadow-md transition flex flex-col">
-      {/* Image */}
+    <div className="bg-white border rounded-xl hover:shadow-md transition flex flex-col">
+      
+      {/* IMAGE */}
       <Link href={`/products/${product.slug}`}>
-        <div className="h-40 flex items-center justify-center mb-4">
+        <div className="h-44 flex items-center justify-center p-4">
           <img
             src={product.image}
             alt={product.name}
@@ -16,30 +17,30 @@ export default function ProductCard({ product }: any) {
         </div>
       </Link>
 
-      {/* Name */}
-      <h3 className="font-medium text-sm mb-1">{product.name}</h3>
+      {/* CONTENT */}
+      <div className="px-4 pb-4 flex flex-col flex-1">
+        <h3 className="font-semibold text-sm mb-1">{product.name}</h3>
 
-      {/* Active ingredient */}
-      <p className="text-xs text-gray-500 mb-2">
-        Active ingredient:{" "}
-        <span className="text-blue-600 font-medium">
-          {product.activeIngredient}
-        </span>
-      </p>
+        <p className="text-xs text-gray-500 mb-2">
+          Active ingredient:{" "}
+          <span className="text-blue-600 font-medium">
+            {product.activeIngredient}
+          </span>
+        </p>
 
-      {/* Price */}
-      <div className="text-blue-600 font-bold text-lg mb-3">
-        ${product.price}
-        <span className="text-sm text-gray-500 ml-1">pill</span>
-      </div>
+        <div className="text-blue-600 font-bold text-lg mb-3">
+          ${product.pricePerPill}
+          <span className="text-sm text-gray-500 font-normal ml-1">pill</span>
+        </div>
 
-      {/* Buy Now */}
-      <Link href={`/products/${product.slug}`}>
-        <button className="mt-auto w-full bg-gray-100 hover:bg-gray-200 text-sm py-2 rounded transition">
+        {/* BUY NOW */}
+        <Link
+          href={`/products/${product.slug}`}
+          className="mt-auto block text-center bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+        >
           Buy Now
-        </button>
-      </Link>
+        </Link>
+      </div>
     </div>
   );
 }
-
