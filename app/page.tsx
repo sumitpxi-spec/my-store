@@ -13,22 +13,36 @@ export default function Home() {
   const [page, setPage] = useState(1);
 
   useEffect(() => {
-  fetch("/api/products")
-    .then(res => {
-      console.log("STATUS:", res.status);
-      return res.json();
-    })
-    .then(data => {
-      console.log("DATA FROM API:", data);
-      setProducts(data);
-    })
-    .catch(err => {
-      console.error("FETCH ERROR:", err);
-    });
-}, []);
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch("/api/products");
 
+        console.log("STATUS:", res.status);
 
+        if (!res.ok) throw new Error("Failed to fetch products");
+
+        const data = await res.json();
+        console.log("DATA FROM API:", data);
+
+        // ✅ CRITICAL FIX: always store ARRAY, not object
+        if (Array.isArray(data.products)) {
+          setProducts(data.products);
+        } else {
+          console.error("products is not an array:", data);
+          setProducts([]);
+        }
+      } catch (err) {
+        console.error("FETCH ERROR:", err);
+        setProducts([]);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  // ✅ SAFE pagination
   const totalPages = Math.ceil(products.length / PER_PAGE);
+
   const paginated = products.slice(
     (page - 1) * PER_PAGE,
     page * PER_PAGE
@@ -62,7 +76,7 @@ export default function Home() {
                 gap: 20,
               }}
             >
-              {paginated.map(p => (
+              {paginated.map((p) => (
                 <ProductCard key={p._id} product={p} />
               ))}
             </div>
@@ -74,5 +88,3 @@ export default function Home() {
     </>
   );
 }
-
-
