@@ -17,8 +17,8 @@ const categories = [
 
 export default function Sidebar() {
   return (
-    <aside className="bg-white rounded-xl p-4 shadow-sm w-64">
-      <ul className="space-y-3 text-sm">
+    <aside className="w-64 bg-white border rounded-lg p-4">
+      <ul className="space-y-2 text-sm">
         {categories.map((cat) => (
           <li
             key={cat}
