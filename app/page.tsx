@@ -14,8 +14,6 @@ export default function Home() {
       try {
         const res = await fetch("/api/products");
         const data = await res.json();
-
-        // STRICT GUARD
         setProducts(Array.isArray(data.products) ? data.products : []);
       } catch (err) {
         console.error("Failed to fetch products", err);
@@ -31,24 +29,25 @@ export default function Home() {
       <Header />
 
       <main className="bg-gray-50 min-h-screen">
-        <div className="max-w-7xl mx-auto px-6 py-10 flex gap-8">
-          
-          {/* LEFT SIDEBAR */}
+        <div className="max-w-7xl mx-auto px-6 py-8 flex gap-6">
+
+          {/* SIDEBAR */}
           <aside className="w-64 shrink-0">
             <Sidebar />
           </aside>
 
           {/* PRODUCTS */}
           <section className="flex-1">
-            <h1 className="text-2xl font-semibold mb-6">Products</h1>
+            <h1 className="text-2xl font-semibold mb-4">Products</h1>
 
-            {/* ✅ FINAL PRODUCT GRID */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* ✅ TIGHT GRID */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {products.map((product) => (
                 <ProductCard key={product._id} product={product} />
               ))}
             </div>
           </section>
+
         </div>
       </main>
 
