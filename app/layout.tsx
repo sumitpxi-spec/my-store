@@ -1,8 +1,9 @@
 import "./globals.css";
+import type { Metadata } from "next";
 
-export const metadata = {
-  title: "HappyFamilyStore",
-  description: "Online Store",
+export const metadata: Metadata = {
+  title: "My Store",
+  description: "Online Pharmacy",
 };
 
 export default function RootLayout({
