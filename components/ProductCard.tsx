@@ -9,11 +9,11 @@ export default function ProductCard({ product }: any) {
     null;
 
   return (
-    <div className="bg-white border rounded-lg overflow-hidden hover:shadow-md transition flex flex-col">
+    <div className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition flex flex-col h-full">
       
-      {/* PRODUCT IMAGE */}
+      {/* IMAGE */}
       <Link href={`/products/${product.slug}`} className="block">
-        <div className="h-48 flex items-center justify-center p-4 bg-white">
+        <div className="h-52 flex items-center justify-center bg-white p-4 border-b">
           <img
             src={product.image}
             alt={product.name}
@@ -22,15 +22,15 @@ export default function ProductCard({ product }: any) {
         </div>
       </Link>
 
-      {/* PRODUCT CONTENT */}
-      <div className="px-4 pb-4 flex flex-col flex-1">
+      {/* CONTENT */}
+      <div className="flex flex-col flex-1 p-4">
         
         {/* TITLE */}
-        <h3 className="text-base font-semibold text-gray-900 mb-1">
+        <h3 className="text-[15px] font-semibold text-gray-900 leading-snug mb-1">
           {product.name}
         </h3>
 
-        {/* ACTIVE INGREDIENT */}
+        {/* INGREDIENT */}
         <p className="text-sm text-gray-500 mb-3">
           Active ingredient:{" "}
           <span className="text-blue-600 font-medium">
@@ -40,7 +40,7 @@ export default function ProductCard({ product }: any) {
 
         {/* PRICE */}
         <div className="mb-4">
-          <span className="text-blue-600 text-xl font-bold">
+          <span className="text-blue-600 text-2xl font-bold">
             {price !== null ? `$${price}` : "—"}
           </span>
           <span className="text-sm text-gray-500 ml-1">
@@ -48,20 +48,18 @@ export default function ProductCard({ product }: any) {
           </span>
         </div>
 
-        {/* ACTION BUTTONS */}
+        {/* ACTIONS (STICK TO BOTTOM) */}
         <div className="mt-auto flex items-center gap-2">
           
           {/* ADD TO CART */}
-          <button
-            className="flex-1 bg-gray-100 text-gray-800 py-2 rounded-md text-sm font-medium hover:bg-gray-200 transition"
-          >
+          <button className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 text-sm font-medium py-2 rounded-md transition">
             Add to cart
           </button>
 
           {/* FAVORITE */}
           <button
             aria-label="Add to favorites"
-            className="w-10 h-10 flex items-center justify-center border rounded-md hover:bg-gray-50 transition"
+            className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-md hover:bg-gray-50 transition"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
