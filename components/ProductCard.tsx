@@ -2,22 +2,14 @@
 
 import Link from "next/link";
 
-type Product = {
-  slug: string;
-  name: string;
-  image?: string;
-  activeIngredient?: string;
-  price: number;
-};
-
-export default function ProductCard({ product }: { product: Product }) {
+export default function ProductCard({ product }: any) {
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-4 text-center hover:shadow-md transition">
+    <div className="bg-white border rounded-lg p-4 hover:shadow-md transition flex flex-col">
       {/* Image */}
       <Link href={`/products/${product.slug}`}>
-        <div className="h-44 flex items-center justify-center mb-4 cursor-pointer">
+        <div className="h-40 flex items-center justify-center mb-4">
           <img
-            src={product.image || "/placeholder.png"}
+            src={product.image}
             alt={product.name}
             className="max-h-full object-contain"
           />
@@ -25,28 +17,29 @@ export default function ProductCard({ product }: { product: Product }) {
       </Link>
 
       {/* Name */}
-      <h3 className="text-base font-semibold mb-2">{product.name}</h3>
+      <h3 className="font-medium text-sm mb-1">{product.name}</h3>
 
       {/* Active ingredient */}
-      <p className="text-sm text-gray-600 mb-3">
+      <p className="text-xs text-gray-500 mb-2">
         Active ingredient:{" "}
-        <span className="font-medium text-gray-800">
-          {product.activeIngredient || "—"}
+        <span className="text-blue-600 font-medium">
+          {product.activeIngredient}
         </span>
       </p>
 
       {/* Price */}
       <div className="text-blue-600 font-bold text-lg mb-3">
-        ${product.price.toFixed(2)}
-        <span className="text-sm text-gray-500 font-normal"> / pill</span>
+        ${product.price}
+        <span className="text-sm text-gray-500 ml-1">pill</span>
       </div>
 
-      {/* Buy now */}
+      {/* Buy Now */}
       <Link href={`/products/${product.slug}`}>
-        <button className="w-full border border-gray-400 text-sm py-1.5 rounded hover:bg-gray-100 transition">
-          Buy Now ❤️
+        <button className="mt-auto w-full bg-gray-100 hover:bg-gray-200 text-sm py-2 rounded transition">
+          Buy Now
         </button>
       </Link>
     </div>
   );
 }
+
