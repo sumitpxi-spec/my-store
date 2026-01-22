@@ -2,8 +2,8 @@
 
 export default function Sidebar() {
   return (
-    <aside className="bg-white border border-gray-200 rounded-xl p-4">
-      <ul className="space-y-2 text-sm text-gray-800">
+    <aside className="bg-white border rounded-xl p-4">
+      <ul className="space-y-2 text-sm">
         <li className="font-semibold">Bestsellers</li>
         <li>Anti Viral</li>
         <li>Anti-Acidity</li>
