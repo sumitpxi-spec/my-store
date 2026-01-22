@@ -15,7 +15,7 @@ export default function Home() {
         const res = await fetch("/api/products");
         const data = await res.json();
 
-        // ✅ STRICT GUARD
+        // ✅ STRICT GUARD – API MUST RETURN ARRAY
         setProducts(Array.isArray(data.products) ? data.products : []);
       } catch (err) {
         console.error("Failed to fetch products", err);
@@ -37,17 +37,19 @@ export default function Home() {
           <aside className="w-64 shrink-0">
             <Sidebar />
           </aside>
-          
-          {/* PRODUCTS */}
+
+          {/* PRODUCTS SECTION */}
           <section className="flex-1">
             <h1 className="text-2xl font-semibold mb-6">Products</h1>
 
+            {/* ✅ PRODUCT GRID (THIS WAS MISSING BEFORE) */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {products.map((product) => (
                 <ProductCard key={product._id} product={product} />
               ))}
             </div>
           </section>
+
         </div>
       </main>
 
@@ -55,5 +57,3 @@ export default function Home() {
     </>
   );
 }
-
-
