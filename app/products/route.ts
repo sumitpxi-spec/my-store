@@ -1,64 +1,40 @@
 import { NextResponse } from "next/server";
 
-export async function GET(req: Request) {
+export async function GET() {
   try {
-    const { searchParams } = new URL(req.url);
-    const page = searchParams.get("page") || "1";
-    const limit = "12";
-
-    const backendRes = await fetch(
-      `${process.env.BACKEND_URL}/products?page=${page}&limit=${limit}`,
+    const res = await fetch(
+      `${process.env.BACKEND_URL}/products`,
       { cache: "no-store" }
     );
 
-    if (!backendRes.ok) {
+    if (!res.ok) {
       throw new Error("Backend error");
     }
 
-    const backendData = await backendRes.json();
+    const rawProducts = await res.json();
 
-    /**
-     * CASE 1: backend already paginated
-     */
-    if (backendData.products && backendData.pagination) {
-      return NextResponse.json(backendData);
-    }
+    // Normalize backend response
+    const products = rawProducts.map((p: any) => ({
+      _id: p._id,
+      name: p.title, // 🔑 title → name
+      slug: p.slug,
+      activeIngredient: p.genericName, // 🔑 genericName → activeIngredient
+      price: p.pricePerPill, // 🔑 pricePerPill → price
+      image: p.images?.[0] || "", // 🔑 images[] → image
+    }));
 
-    /**
-     * CASE 2: backend returns raw array (old behavior)
-     */
-    if (Array.isArray(backendData)) {
-      return NextResponse.json({
-        products: backendData.map((p: any) => ({
-          _id: p._id,
-          name: p.name || p.title,
-          slug: p.slug || p._id,
-          image: p.image || p.images?.[0]?.url || "",
-          activeIngredient:
-            p.activeIngredient || p.active_ingredient || "",
-          price:
-            p.price || p.pricePerPill || p.price_per_pill || "",
-        })),
-        pagination: {
-          page: Number(page),
-          totalPages: 1,
-        },
-      });
-    }
-
-    /**
-     * Fallback
-     */
     return NextResponse.json({
-      products: [],
-      pagination: { page: 1, totalPages: 1 },
+      products,
+      pagination: {
+        page: 1,
+        totalPages: 1,
+      },
     });
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
     return NextResponse.json(
       { error: "Failed to fetch products" },
       { status: 500 }
     );
   }
 }
-
