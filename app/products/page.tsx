@@ -11,22 +11,31 @@ export default function ProductsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
-  const fetchProducts = async () => {
-    try {
-      setLoading(true);
-      setError(false);
+const fetchProducts = async () => {
+  try {
+    setLoading(true);
+    setError(false);
 
-      const res = await fetch("/api/products");
-      if (!res.ok) throw new Error("Failed");
+    const res = await fetch("/api/products");
+    if (!res.ok) throw new Error("Failed");
 
-      const data = await res.json();
-      setProducts(Array.isArray(data.products) ? data.products : []);
-    } catch {
-      setError(true);
-    } finally {
-      setLoading(false);
+    const data = await res.json();
+
+    // ✅ HARD GUARD
+    if (Array.isArray(data.products)) {
+      setProducts(data.products);
+    } else {
+      console.error("Products is not an array:", data.products);
+      setProducts([]);
     }
-  };
+  } catch (err) {
+    console.error(err);
+    setError(true);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   useEffect(() => {
     fetchProducts();
