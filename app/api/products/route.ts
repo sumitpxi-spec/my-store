@@ -16,8 +16,24 @@ export async function GET() {
       );
     }
 
-    const data = await res.json();
-    return NextResponse.json(data);
+    const rawProducts = await res.json();
+
+    const products = rawProducts.map((p: any) => ({
+      _id: p._id,
+      name: p.title,
+      slug: p.slug,
+      activeIngredient: p.genericName,
+      price: p.pricePerPill,
+      image: p.images?.[0] || "",
+    }));
+
+    return NextResponse.json({
+      products,
+      pagination: {
+        page: 1,
+        totalPages: 1,
+      },
+    });
   } catch (err) {
     return NextResponse.json(
       { error: "Server error" },
