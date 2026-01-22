@@ -2,7 +2,7 @@
 
 export default function Sidebar() {
   return (
-    <div className="bg-white border rounded-xl p-4">
+    <aside className="w-64 bg-white border rounded-lg p-4">
       <ul className="space-y-2 text-sm">
         <li className="font-medium">Bestsellers</li>
         <li>Anti Viral</li>
@@ -17,6 +17,6 @@ export default function Sidebar() {
         <li>Weight Loss</li>
         <li>Women&apos;s Health</li>
       </ul>
-    </div>
+    </aside>
   );
 }
