@@ -8,7 +8,7 @@ export default function ProductCard({ product }: any) {
       
       {/* IMAGE */}
       <Link href={`/products/${product.slug}`}>
-        <div className="h-44 flex items-center justify-center p-4">
+        <div className="h-48 flex items-center justify-center p-6 border-b">
           <img
             src={product.image}
             alt={product.name}
@@ -18,7 +18,7 @@ export default function ProductCard({ product }: any) {
       </Link>
 
       {/* CONTENT */}
-      <div className="px-4 pb-4 flex flex-col flex-1">
+      <div className="p-4 flex flex-col flex-1">
         <h3 className="font-semibold text-sm mb-1">{product.name}</h3>
 
         <p className="text-xs text-gray-500 mb-2">
@@ -28,7 +28,7 @@ export default function ProductCard({ product }: any) {
           </span>
         </p>
 
-        <div className="text-blue-600 font-bold text-lg mb-3">
+        <div className="text-blue-600 font-bold text-lg mb-4">
           ${product.pricePerPill}
           <span className="text-sm text-gray-500 font-normal ml-1">pill</span>
         </div>
