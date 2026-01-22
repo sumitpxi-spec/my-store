@@ -3,11 +3,23 @@
 import Link from "next/link";
 
 export default function ProductCard({ product }: { product: any }) {
+  // 🔍 DEBUG (REMOVE LATER)
+  console.log("PRODUCT:", product);
+
+  // ✅ PRICE RESOLUTION (handles ALL cases)
+  const rawPrice =
+    product.pricePerPill ??
+    product.price ??
+    product.price_per_pill ??
+    product.pricePerUnit ??
+    product?.prices?.perPill ??
+    null;
+
   const price =
-    typeof product.pricePerPill === "number"
-      ? product.pricePerPill.toFixed(2)
-      : product.pricePerPill
-      ? Number(product.pricePerPill).toFixed(2)
+    typeof rawPrice === "number"
+      ? rawPrice.toFixed(2)
+      : rawPrice
+      ? Number(rawPrice).toFixed(2)
       : null;
 
   return (
@@ -36,7 +48,7 @@ export default function ProductCard({ product }: { product: any }) {
 
         {/* PRICE */}
         <div className="text-blue-600 font-bold text-lg mb-4">
-          {price ? `$${price}` : "—"}
+          {price ? `$${price}` : "Price unavailable"}
           <span className="text-sm text-gray-500 font-normal ml-1">/ pill</span>
         </div>
 
