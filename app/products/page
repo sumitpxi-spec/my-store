@@ -1,94 +1,63 @@
-"use client";
+import { NextResponse } from "next/server";
 
-import { useEffect, useState } from "react";
-import ProductSkeleton from "@/components/ProductSkeleton";
-import ProductError from "@/components/ProductError";
-import ProductCard from "@/components/ProductCard";
+export async function GET(req: Request) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const page = searchParams.get("page") || "1";
+    const limit = "12";
 
-export default function ProductsPage() {
-  const [products, setProducts] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+    const backendRes = await fetch(
+      `${process.env.BACKEND_URL}/products?page=${page}&limit=${limit}`,
+      { cache: "no-store" }
+    );
 
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-
-  const fetchProducts = async () => {
-    try {
-      setLoading(true);
-      setError(false);
-
-      const res = await fetch(`/api/products?page=${page}`);
-      if (!res.ok) throw new Error("Failed");
-
-      const data = await res.json();
-      setProducts(data.products);
-      setTotalPages(data.pagination.totalPages);
-    } catch {
-      setError(true);
-    } finally {
-      setLoading(false);
+    if (!backendRes.ok) {
+      throw new Error("Backend error");
     }
-  };
 
-  useEffect(() => {
-    fetchProducts();
-  }, [page]);
+    const backendData = await backendRes.json();
 
-  if (error) {
-    return <ProductError onRetry={fetchProducts} />;
+    /**
+     * CASE 1: backend already paginated
+     */
+    if (backendData.products && backendData.pagination) {
+      return NextResponse.json(backendData);
+    }
+
+    /**
+     * CASE 2: backend returns raw array (old behavior)
+     */
+    if (Array.isArray(backendData)) {
+      return NextResponse.json({
+        products: backendData.map((p: any) => ({
+          _id: p._id,
+          name: p.name || p.title,
+          slug: p.slug || p._id,
+          image: p.image || p.images?.[0]?.url || "",
+          activeIngredient:
+            p.activeIngredient || p.active_ingredient || "",
+          price:
+            p.price || p.pricePerPill || p.price_per_pill || "",
+        })),
+        pagination: {
+          page: Number(page),
+          totalPages: 1,
+        },
+      });
+    }
+
+    /**
+     * Fallback
+     */
+    return NextResponse.json({
+      products: [],
+      pagination: { page: 1, totalPages: 1 },
+    });
+  } catch (err) {
+    console.error(err);
+    return NextResponse.json(
+      { error: "Failed to fetch products" },
+      { status: 500 }
+    );
   }
-
-  return (
-    <div className="flex gap-8">
-      {/* Sidebar (already exists in your UI) */}
-      <aside className="w-64 hidden md:block">
-        {/* categories */}
-      </aside>
-
-      {/* Products */}
-      <div className="flex-1">
-        <h1 className="text-2xl font-bold mb-6">Products</h1>
-
-        {loading ? (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <ProductSkeleton key={i} />
-            ))}
-          </div>
-        ) : (
-          <>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {products.map((product) => (
-                <ProductCard key={product._id} product={product} />
-              ))}
-            </div>
-
-            {/* Pagination */}
-            <div className="flex justify-center gap-4 mt-10">
-              <button
-                disabled={page === 1}
-                onClick={() => setPage((p) => p - 1)}
-                className="px-4 py-2 border rounded disabled:opacity-50"
-              >
-                Prev
-              </button>
-
-              <span className="px-4 py-2">
-                {page} / {totalPages}
-              </span>
-
-              <button
-                disabled={page === totalPages}
-                onClick={() => setPage((p) => p + 1)}
-                className="px-4 py-2 border rounded disabled:opacity-50"
-              >
-                Next
-              </button>
-            </div>
-          </>
-        )}
-      </div>
-    </div>
-  );
 }
