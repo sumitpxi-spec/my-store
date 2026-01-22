@@ -2,82 +2,38 @@
 
 import { useEffect, useState } from "react";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import Sidebar from "@/components/Sidebar";
 import ProductCard from "@/components/ProductCard";
-import Footer from "@/components/Footer";
-
-const PER_PAGE = 12;
 
 export default function Home() {
   const [products, setProducts] = useState<any[]>([]);
-  const [page, setPage] = useState(1);
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const res = await fetch("/api/products");
-
-        console.log("STATUS:", res.status);
-
-        if (!res.ok) throw new Error("Failed to fetch products");
-
-        const data = await res.json();
-        console.log("DATA FROM API:", data);
-
-        // ✅ CRITICAL FIX: always store ARRAY, not object
-        if (Array.isArray(data.products)) {
-          setProducts(data.products);
-        } else {
-          console.error("products is not an array:", data);
-          setProducts([]);
-        }
-      } catch (err) {
-        console.error("FETCH ERROR:", err);
-        setProducts([]);
-      }
-    };
-
-    fetchProducts();
+    fetch("/api/products")
+      .then((res) => res.json())
+      .then((data) => {
+        setProducts(Array.isArray(data.products) ? data.products : []);
+      })
+      .catch(() => setProducts([]));
   }, []);
-
-  // ✅ SAFE pagination
-  const totalPages = Math.ceil(products.length / PER_PAGE);
-
-  const paginated = products.slice(
-    (page - 1) * PER_PAGE,
-    page * PER_PAGE
-  );
 
   return (
     <>
       <Header />
 
-      <main style={{ background: "#f7f8fb", minHeight: "80vh" }}>
-        <div
-          style={{
-            maxWidth: 1200,
-            margin: "0 auto",
-            padding: "30px 20px",
-            display: "flex",
-            gap: 30,
-          }}
-        >
+      <main className="bg-gray-50 min-h-screen">
+        <div className="max-w-7xl mx-auto px-6 py-8 flex gap-8">
+          {/* Sidebar */}
           <Sidebar />
 
-          <section style={{ flex: 1 }}>
-            <h2>Products</h2>
+          {/* Products */}
+          <section className="flex-1">
+            <h1 className="text-2xl font-semibold mb-6">Products</h1>
 
-            {paginated.length === 0 && <p>No products found.</p>}
-
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(4, 1fr)",
-                gap: 20,
-              }}
-            >
-              {paginated.map((p) => (
-                <ProductCard key={p._id} product={p} />
+            <div className="grid grid-cols-4 gap-6">
+              {products.map((product) => (
+                <ProductCard key={product._id} product={product} />
               ))}
             </div>
           </section>
